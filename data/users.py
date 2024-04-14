@@ -2,6 +2,7 @@ import sqlalchemy
 from sqlalchemy import orm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from sqlalchemy import orm
 
 from .db_session import SqlAlchemyBase
 
@@ -11,10 +12,12 @@ class User(SqlAlchemyBase, UserMixin):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     email = sqlalchemy.Column(sqlalchemy.String,
                               index=True, unique=True, nullable=True)
-    hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    items = orm.relationship("Items", back_populates='creator')
+    order = orm.relationship("Orders", back_populates='orderer')
 
     def __repr__(self):
         return f'<User> {self.id} {self.name} {self.email}'
