@@ -2,4 +2,11 @@
 {% block title %} Home Page {% endblock %}
 {% block content %}
 <h1> Test </h1>
+{% for elem in user %}
+<div>
+    <h2>{{elem.name}}</h2>
+    <h2>{{elem.email}}</h2>
+    <h2>{{elem.id}}</h2>
+</div>
+{% endfor %}
 {% endblock %}

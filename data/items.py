@@ -11,7 +11,7 @@ class Items(SqlAlchemyBase):
                            primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     type = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("types.id"))
-    creator = orm.relationship('User')
+    #creator = orm.relationship('User')
     price = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     picture = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     def __repr__(self):
