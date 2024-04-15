@@ -1,5 +1,5 @@
+from flask import Flask, render_template, redirect
 from forms.register_form import LoginForm
-from flask import Flask, render_template, url_for, redirect, request
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -20,15 +20,9 @@ def login():
 def registration():
     form = LoginForm()
     if form.validate_on_submit():
-        return redirect('/success')
-    return render_template('base.html', title='Авторизация', form=form)
+        return redirect(url_for('success'))
+    return render_template('registration.html', title='Авторизация', form=form)
 
-@app.route('/creator',methods=["POST", "GET"])
-def creator():
-    if request.method == "POST":
-        user = request.form['product_name']
-        return redirect(url_for("home"))
-    return render_template('creator.html')
 
 @app.route("/desing")
 def desing():
@@ -38,6 +32,11 @@ def desing():
 @app.route("/shopping_basket")
 def shopping_basket():
     return "<h1> shopping basket</h1>"
+
+
+@app.route('/success')
+def success():
+    return "Успешная регистрация!"
 
 
 def main():
