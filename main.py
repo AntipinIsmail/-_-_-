@@ -21,7 +21,7 @@ def registration():
     form = LoginForm()
     if form.validate_on_submit():
         return redirect(url_for('success'))
-    return render_template('base.html', title='Авторизация', form=form)
+    return render_template('registration.html', title='Авторизация', form=form)
 
 
 @app.route("/desing")
