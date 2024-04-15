@@ -20,7 +20,7 @@ def login():
 def registration():
     form = LoginForm()
     if form.validate_on_submit():
-        return redirect('/success')
+        return redirect(url_for('success'))
     return render_template('base.html', title='Авторизация', form=form)
 
 
@@ -32,6 +32,11 @@ def desing():
 @app.route("/shopping_basket")
 def shopping_basket():
     return "<h1> shopping basket</h1>"
+
+
+@app.route('/success')
+def success():
+    return "Успешная регистрация!"
 
 
 def main():
