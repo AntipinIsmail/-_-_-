@@ -1,22 +1,33 @@
-from flask import Flask, render_template, redirect
-from forms.register_form import LoginForm
+#from forms.register_form import RegisterForm
+from forms.user import LoginForm, RegisterForm
+from flask import Flask, render_template, url_for, redirect, request
+from flask_login import login_user, LoginManager
+# , login_required, logout_user, current_user
+
+from data import db_session
+from data.users import User
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
+#login_manager = LoginManager()
+#login_manager.init_app(app)
+#login_manager.login_view = 'login'
+
+
+#@login_manager.user_loader
+#def load_user(user_id):
+ #   return User.query.get(int(user_id))
+
 
 @app.route("/")
 def index():
-    user = "Пользователь"
-    return render_template('index.html', title='Домашняя страница', username=user)
+    # user = "Пользователь"
+    db_sess = db_session.create_session()
+    users = db_sess.query(User).filter().all()
+    return render_template('index.html', user=users)
 
-
-@app.route("/login")
-def login():
-    return "<h1> loamdfniasn</h1>"
-
-
-@app.route('/registration', methods=['GET', 'POST'])
+@app.route('/zzzz', methods=['GET', 'POST'])
 def registration():
     form = LoginForm()
     if form.validate_on_submit():
@@ -24,9 +35,55 @@ def registration():
     return render_template('registration.html', title='Авторизация', form=form)
 
 
-@app.route("/desing")
-def desing():
-    return "<h1> desing</h1>"
+@app.route('/registration', methods=['GET', 'POST'])
+def reqister():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        if form.password.data != form.password_again.data:
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Пароли не совпадают")
+        db_sess = db_session.create_session()
+        if db_sess.query(User).filter(User.email == form.email.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть")
+        user = User(
+            name=form.name.data,
+            email=form.email.data,
+        )
+        user.set_password(form.password.data)
+        db_sess.add(user)
+        db_sess.commit()
+        return redirect('/login')
+    return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    print('successfully Login form')
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        print('session created')
+        if user:
+            print('correct user')
+            if user.check_password(form.password.data):
+                print('correct psw')
+                #login_user(user)
+                return redirect('/')
+            else:
+                return render_template('login.html')
+    return render_template("login2.html", form=form)
+
+
+@app.route('/creator', methods=["POST", "GET"])
+def creator():
+    if request.method == "POST":
+        #  user = request.form['product_name']
+        return redirect(url_for("home"))
+    return render_template('creator.html')
 
 
 @app.route("/shopping_basket")
@@ -34,15 +91,15 @@ def shopping_basket():
     return "<h1> shopping basket</h1>"
 
 
-@app.route('/success')
-def success():
-    return "Успешная регистрация!"
-
-
 def main():
-    # db_session.global_init("db/blogs.db")
+    db_session.global_init("db/blogs.db")
     app.run()
 
 
 if __name__ == '__main__':
     main()
+   # db_sess = db_session.create_session()
+   # user_email = db_sess.query(User).filter(User.email == "terminate@gmail.com").first()
+    #password = db_sess.query(User).filter(User.email == "antipinismail@yandex.ru").first()
+   # print(user_email.check_password("123456789"))
+
