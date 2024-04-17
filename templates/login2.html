@@ -1,14 +1,5 @@
-<style>
-    body {
-    background-image: url('{{ url_for('static', filename='images/background.jpg') }}');
-    background-size: 1920px 1080px;
-    background-repeat: no-repeat;
-    background-position: center -100px;
-}
-</style>
-
 {% extends "base.html" %}
-<body>
+
 {% block content %}
 <h1>Авторизация</h1>
 <form action="" method="post" novalidate>
@@ -33,5 +24,4 @@
     </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
 </form>
-</body>
 {% endblock %}

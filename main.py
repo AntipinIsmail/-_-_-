@@ -58,24 +58,19 @@ def reqister():
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    print('successfully Login form')
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
-        print('session created')
         if user:
-            print('correct user')
             if user.check_password(form.password.data):
-                print('correct psw')
-                #login_user(user)
-                return redirect('/')
-            else:
-                return render_template('login.html')
+               # login_user(user)
+               return redirect('/')
     return render_template("login2.html", form=form)
+
+
 
 
 @app.route('/creator', methods=["POST", "GET"])
