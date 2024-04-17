@@ -98,8 +98,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-   # db_sess = db_session.create_session()
-   # user_email = db_sess.query(User).filter(User.email == "terminate@gmail.com").first()
-    #password = db_sess.query(User).filter(User.email == "antipinismail@yandex.ru").first()
-   # print(user_email.check_password("123456789"))
 

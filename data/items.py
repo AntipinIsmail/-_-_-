@@ -10,10 +10,17 @@ class Items(SqlAlchemyBase):
     article = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    type = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("types.id"))
-    #creator = orm.relationship('User')
+    type = orm.relationship("Types")
+    type_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                sqlalchemy.ForeignKey("types.id"))
+    creator = orm.relationship('User')
+    сreator_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                sqlalchemy.ForeignKey("users.id"))
     price = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     picture = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+
+    orders = orm.relationship("Orders", back_populates='item')
+
     def __repr__(self):
         return f'<Created> {self.creator} {self.name} {self.article}'
 
