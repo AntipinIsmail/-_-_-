@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <style>
 form.login_form {
     margin-left: auto;
@@ -43,12 +45,14 @@ body {
     <h1>Регистрация на платформе ВсеФутболки.ру</h1>
     <div>
         <form class="login_form" method="post">
+            <input type="text" class="form-control" id="name" placeholder="Введите имя" name="user_name">
             <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Введите адрес почты" name="email">
             <input type="password" class="form-control" id="password" placeholder="Введите пароль" name="password">
-
+            <input type="password" class="form-control" id="password2" placeholder="Введите пароль снова" name="password_again">
             <button type="submit" class="btn btn-primary">Зарегистрироваться!</button>
             <a href="{{ url_for('login') }}">Войти</a>
         </form>
     </div>
 </body>
 </html>
+{% endblock %}
