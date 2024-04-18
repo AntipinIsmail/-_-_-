@@ -1,5 +1,14 @@
-{% extends "base.html" %}
+<style>
+    body {
+    background-image: url('{{ url_for('static', filename='images/background.jpg') }}');
+    background-size: 1920px 1080px;
+    background-repeat: no-repeat;
+    background-position: center -100px;
+}
+</style>
 
+{% extends "base.html" %}
+<body>
 {% block content %}
 <h1>Авторизация</h1>
 <form action="" method="post" novalidate>
@@ -21,8 +30,16 @@
         {{ error }}
     </div>
     {% endfor %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <h6> {{message}} </h6>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
     </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
-    {{message}}
 </form>
+</body>
+
 {% endblock %}

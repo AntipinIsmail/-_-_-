@@ -1,33 +1,41 @@
-# from forms.register_form import RegisterForm
-from forms.user import LoginForm, RegisterForm
-from forms.Item import AddItem
-from flask import Flask, render_template, url_for, redirect, request
-from flask_login import login_user, LoginManager
-# , login_required, logout_user, current_user
+import os
+
+from flask import Flask, render_template, url_for, redirect, request, flash, send_from_directory
+from flask_login import login_user, LoginManager, login_required, logout_user, current_user
+from flask_uploads import (UploadSet, IMAGES, configure_uploads)
 
 from data import db_session
 from data.users import User
 from data.items import Items
+#from data.types import Types
+from data.orders import Orders
+from forms.user import LoginForm, RegisterForm
+from forms.Item import AddItem
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['UPLOADED_PHOTO_DEST'] = 'uploads'
+
+photos = UploadSet("photo", IMAGES)
+configure_uploads(app, photos)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 
-# login_manager = LoginManager()
-# login_manager.init_app(app)
-# login_manager.login_view = 'login'
-
-
-# @login_manager.user_loader
-# def load_user(user_id):
-#   return User.query.get(int(user_id))
-
-
-@app.route("/")
-def index():
-    # user = "Пользователь"
+@login_manager.user_loader
+def load_user(user_id):
     db_sess = db_session.create_session()
-    users = db_sess.query(User).filter().all()
+    return db_sess.query(User).get(user_id)
+
+
+@app.route("/", methods=['GET', 'POST'])
+def index():
+    db_sess = db_session.create_session()
+    users = db_sess.query(Items).filter().all()
+    if current_user.is_authenticated:
+        print('alright, you are already logged in')
     return render_template('index.html', user=users)
 
 
@@ -63,28 +71,54 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user:
             if user.check_password(form.password.data):
-                # login_user(user)
+                login_user(user)
                 return redirect('/')
+            else:
+                flash('incorrect password!')
+                return render_template('login2.html', form=form)
+        else:
+            flash('incorrect email!')
+            return render_template('login2.html', form=form)
     return render_template("login2.html", form=form)
 
 
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
+@app.route("/uploads/<filename>")
+def get_file(filename):
+    return send_from_directory(app.config["UPLOADED_PHOTOS_DEST"], filename)
+
+
 @app.route('/creator', methods=["POST", "GET"])
-# @login_required
+@login_required
 def creator():
+    # info = [elem for elem in db_sess.query(Types).filter().all()]
     form = AddItem()
+    # form.info = info
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        item = Items()
-        item.name = form.item_name.data
-        item.price = form.price.data
-        item.picture = form.photo.data.read()
-        item.creator = "Makc"
-        # news.is_private = form.is_private.data
-        # current_user.news.append(news)
-        # db_sess.merge(current_user)
-        # db_sess.commit()
+        item = Items(name=form.item_name.data,
+                     about=form.about.data,
+                     price=form.price.data,
+                     picture=form.photo.data.read(),
+                     user_id=current_user.id,
+                    )
+        db_sess.merge(current_user)
+        db_sess.add(item)
+        db_sess.commit()
+
+        # filename = photos.save(form.photo.data)
+        # filename = form.photo.data.read()
+        # file_url = url_for("get_file", filename=filename)
         return redirect("/")
-    return render_template('creator.html', form=form)
+    else:
+        file_url = None
+    return render_template("creator.html", form=form)
 
 
 @app.route("/test")
@@ -101,7 +135,7 @@ def shopping_basket():
 
 def main():
     db_session.global_init("db/blogs.db")
-    app.run(debug='True')
+    app.run()
 
 
 if __name__ == '__main__':

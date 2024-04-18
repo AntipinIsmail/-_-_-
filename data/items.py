@@ -8,13 +8,13 @@ class Items(SqlAlchemyBase):
     __tablename__ = 'items'
 
     article = sqlalchemy.Column(sqlalchemy.Integer,
-                           primary_key=True, autoincrement=True)
+                                primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    type = orm.relationship("Types")
-    type_id = sqlalchemy.Column(sqlalchemy.Integer,
-                                sqlalchemy.ForeignKey("types.id"))
-    creator = orm.relationship('User')
-    сreator_id = sqlalchemy.Column(sqlalchemy.Integer,
+#type = orm.relationship("Types")
+   # type_id = sqlalchemy.Column(sqlalchemy.Integer,
+                               # sqlalchemy.ForeignKey("types.id"))
+    user = orm.relationship('User')
+    user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     about = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     price = sqlalchemy.Column(sqlalchemy.String, nullable=False)
@@ -35,5 +35,3 @@ class Items(SqlAlchemyBase):
         # Convert binary data to proper format and write it on Hard Disk
         with open(picture, 'wb') as file:
             file.write(data)
-
-
