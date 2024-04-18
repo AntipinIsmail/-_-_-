@@ -1,28 +1,83 @@
+<style>
+    body {
+        background-image: url('{{ url_for('static', filename='images/background.jpg') }}');
+        background-size: 1920px 1080px;
+        background-repeat: no-repeat;
+        background-position: center -100px;
+    }
+    
+    .image {
+        margin-bottom: 10px;
+    }
+    .image img {
+        border-radius: 20px;
+    }
+    .rating {
+        margin-bottom: 0;
+        padding-left: 0;
+        list-style-type: none;
+        color: rgb(228, 163, 22);
+    }
+    .rating li {
+        display: inline-block;
+    }
+    .info h3 {
+        font-size: 19px;
+        font-weight: normal;
+        margin-bottom: 0;
+        font-family: system-ui;
+    }
+    .info small {
+        font-weight: normal;
+        font-family: system-ui;
+        color: rgba(0, 0, 0, 0.603);
+    }
+    .info-price {
+        font-size: 26px;
+        font-weight: 600;
+        font-family: system-ui;
+    }
+    .info-price button{
+        font-size: 20px;
+        border-radius: 5px;
+        border: none;
+        width: 40px;
+        color: aliceblue;
+        font-weight: 600;
+        background-color: rgb(194, 168, 129);
+    }
+    </style>
 <!doctype html>
 <html lang="en">
     <body>
-        <div class="container">
+        <div class="container mt-5">
             <div class="row">
                 <div class="col-md-4">
                     <div class="product">
                         <div class="image">
-                            <img src="http://placehold.it/300x400" alt="">
+                            <img src="http://placehold.it/225x300" alt="">
                         </div>
                         <div class="info">
                             <h3>Название товара</h3>
-                            <ul class="Rating">
-                                <ion-icon name="star"></ion-icon>
-                                <ion-icon name="star"></ion-icon>
-                                <ion-icon name="star"></ion-icon>
-                                <ion-icon name="star"></ion-icon>
-                                <ion-icon name="star-half"></ion-icon>
-                            <span class="price">230<small>$</small></span>
-                            <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
+                            <small>Описание</small>
                         </div>
+                            <ul class="Rating">
+                                <li><ion-icon name="star"></ion-icon></li>
+                                <li><ion-icon name="star"></ion-icon></li>
+                                <li><ion-icon name="star"></ion-icon></li>
+                                <li><ion-icon name="star"></ion-icon></li>
+                                <li><ion-icon name="star-half"></ion-icon></li></ul>
+                        <div class="info-price">
+                            <span class="price">230<small>₽</small></span>
+                            <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
+                        
+                    </div>
+                    
                     </div>
                 </div>
             </div>
         </div>
+        
         <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     </body>
 </html>
