@@ -1,17 +1,20 @@
-from flask import Flask, render_template, url_for, redirect, request, flash
+from flask import Flask, render_template, url_for, redirect, request, flash, send_from_directory
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
-from flask import session as login_session
+from flask_uploads import UploadSet, IMAGES, configure_uploads
 
 from data import db_session
 from data.users import User
 from data.items import Items
-from data.types import Types
-from data.orders import Orders
 from forms.user import LoginForm, RegisterForm
 from forms.Item import AddItem
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
+
+photos = UploadSet("photos", IMAGES)
+configure_uploads(app, photos)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -24,26 +27,20 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-@app.route("/")
+@app.route('/test')
+def test():
+    items = [{'name': 'Забавная футболка', 'description': 'Очень крутая футболка с забавным принтом',
+              'price': 1000, 'image': '/static/images/1.png'}]
+    return render_template('test.html', items=items)
+
+
+@app.route("/", methods=['GET', 'POST'])
 def index():
     db_sess = db_session.create_session()
-    users = db_sess.query(Types).filter().all()
-    item = [{'name': 'Забавная футболка', 'about': 'Очень крутая футболка с забавным принтом',
-              'price': 1000, 'image': '/static/images/1.png'},
-             {'name': 'не футболка', 'about': 'Очень крутая футболка с забавным принтом',
-              'price': 1000, 'image': '/static/images/1.png'},
-             {'name': 'кофта футболка', 'about': 'Очень крутая футболка с забавным принтом',
-              'price': 1000, 'image': '/static/images/1.png'},
-            {'name': 'Забавная футболка', 'about': 'Очень крутая футболка с забавным принтом',
-             'price': 1000, 'image': '/static/images/1.png'},
-            {'name': 'не футболка', 'about': 'Очень крутая футболка с забавным принтом',
-             'price': 1000, 'image': '/static/images/1.png'},
-            {'name': 'кофта футболка', 'about': 'Очень крутая футболка с забавным принтом',
-             'price': 1000, 'image': '/static/images/1.png'}
-            ]  # Пример
-    if current_user.is_authenticated:
-        print('alright, you are already logged in')  # console for me
-    return render_template('test.html', item=item)
+    users = db_sess.query(Items).filter().all()
+    for elem in users:
+        print(type(elem.picture))
+    return render_template('test.html', user=users)
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -58,7 +55,7 @@ def reqister():
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Такой пользователь уже существует")
+                                   message="Такой пользователь уже есть")
         user = User(
             name=form.name.data,
             email=form.email.data,
@@ -81,10 +78,10 @@ def login():
                 login_user(user)
                 return redirect('/')
             else:
-                flash('Неверный пароль')
+                flash('incorrect password!')
                 return render_template('login2.html', form=form)
         else:
-            flash('Неверная почта')
+            flash('incorrect email!')
             return render_template('login2.html', form=form)
     return render_template("login2.html", form=form)
 
@@ -104,21 +101,26 @@ def get_file(filename):
 @app.route('/creator', methods=["POST", "GET"])
 @login_required
 def creator():
-    # info = [elem for elem in db_sess.query(Types).filter().all()]
     form = AddItem()
-    # form.info = info
     if form.validate_on_submit():
+        filename = photos.save(form.photo.data)
+        file_url = url_for('get_file', filename=filename)
+        print(file_url)
+        print(filename)
         db_sess = db_session.create_session()
         item = Items(name=form.item_name.data,
                      about=form.about.data,
                      price=form.price.data,
-                     picture=form.photo.data.read(),
+                     picture=file_url,
                      user_id=current_user.id,
                      )
         db_sess.merge(current_user)
         db_sess.add(item)
         db_sess.commit()
-        return render_template("creator.html", form=form)
+        return redirect("/")
+    else:
+        file_url = None
+    return render_template("creator.html", form=form, file_url=file_url)
 
 
 @app.route('/cart')
@@ -134,12 +136,16 @@ def cart():  # Пример, потом сюда свои данные заки�
     return render_template('cart.html', cart_items=cart_items, total=total)
 
 
-@app.route('/payment')
-@login_required
-def payment():  # Пример
-    total_sum = 60
-    order_id = 1345713
-    return render_template('payment.html', order_id=order_id, total_sum=total_sum)
+# @app.route("/test")
+# def test():
+#   db_sess = db_session.create_session()
+#  users = db_sess.query(User).filter().all()
+# return render_template('index.html', user=users)
+
+
+@app.route("/shopping_basket")
+def shopping_basket():
+    return "<h1> shopping basket</h1>"
 
 
 def main():
