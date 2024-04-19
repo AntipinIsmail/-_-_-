@@ -5,7 +5,7 @@ from flask_wtf.file import FileRequired, FileField, FileAllowed
 from flask_uploads import IMAGES, UploadSet
 
 
-# photos = UploadSet("photo", IMAGES)
+photos = UploadSet("photos", IMAGES)
 
 
 class AddItem(FlaskForm):
@@ -15,7 +15,7 @@ class AddItem(FlaskForm):
     about = StringField("Расскажите о предмете")
     photo = FileField(
         validators=[
-            FileAllowed(UploadSet("photo", IMAGES), "Only images are allowed"),
+            FileAllowed(UploadSet("photos", IMAGES), "Only images are allowed"),
             FileRequired("File field should not be empty")
         ]
     )

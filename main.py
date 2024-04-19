@@ -1,22 +1,19 @@
-import os
-
 from flask import Flask, render_template, url_for, redirect, request, flash, send_from_directory
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
-from flask_uploads import (UploadSet, IMAGES, configure_uploads)
+from flask_uploads import UploadSet, IMAGES, configure_uploads
 
 from data import db_session
 from data.users import User
 from data.items import Items
-#from data.types import Types
-from data.orders import Orders
 from forms.user import LoginForm, RegisterForm
 from forms.Item import AddItem
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-app.config['UPLOADED_PHOTO_DEST'] = 'uploads'
+app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
 
-photos = UploadSet("photo", IMAGES)
+photos = UploadSet("photos", IMAGES)
 configure_uploads(app, photos)
 
 login_manager = LoginManager()
@@ -30,13 +27,20 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
+@app.route('/test')
+def test():
+    items = [{'name': 'Забавная футболка', 'description': 'Очень крутая футболка с забавным принтом',
+              'price': 1000, 'image': '/static/images/1.png'}]
+    return render_template('test.html', items=items)
+
+
 @app.route("/", methods=['GET', 'POST'])
 def index():
     db_sess = db_session.create_session()
     users = db_sess.query(Items).filter().all()
-    if current_user.is_authenticated:
-        print('alright, you are already logged in')
-    return render_template('index.html', user=users)
+    for elem in users:
+        print(type(elem.picture))
+    return render_template('test.html', user=users)
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -97,35 +101,46 @@ def get_file(filename):
 @app.route('/creator', methods=["POST", "GET"])
 @login_required
 def creator():
-    # info = [elem for elem in db_sess.query(Types).filter().all()]
     form = AddItem()
-    # form.info = info
     if form.validate_on_submit():
+        filename = photos.save(form.photo.data)
+        file_url = url_for('get_file', filename=filename)
+        print(file_url)
+        print(filename)
         db_sess = db_session.create_session()
         item = Items(name=form.item_name.data,
                      about=form.about.data,
                      price=form.price.data,
-                     picture=form.photo.data.read(),
+                     picture=file_url,
                      user_id=current_user.id,
-                    )
+                     )
         db_sess.merge(current_user)
         db_sess.add(item)
         db_sess.commit()
-
-        # filename = photos.save(form.photo.data)
-        # filename = form.photo.data.read()
-        # file_url = url_for("get_file", filename=filename)
         return redirect("/")
     else:
         file_url = None
-    return render_template("creator.html", form=form)
+    return render_template("creator.html", form=form, file_url=file_url)
 
 
-@app.route("/test")
-def test():
-    db_sess = db_session.create_session()
-    users = db_sess.query(User).filter().all()
-    return render_template('index.html', user=users)
+@app.route('/cart')
+@login_required
+def cart():  # Пример, потом сюда свои данные закинем
+    cart_items = [
+        {'name': 'Item 1', 'price': 10, 'producer': 'John'},
+        {'name': 'Item 2', 'price': 20, 'producer': 'Mike'},
+        {'name': 'Item 3', 'price': 30, 'producer': 'Kolya'}
+    ]
+    total = sum(item['price'] for item in cart_items)
+
+    return render_template('cart.html', cart_items=cart_items, total=total)
+
+
+# @app.route("/test")
+# def test():
+#   db_sess = db_session.create_session()
+#  users = db_sess.query(User).filter().all()
+# return render_template('index.html', user=users)
 
 
 @app.route("/shopping_basket")
