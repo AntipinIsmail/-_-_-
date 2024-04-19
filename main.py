@@ -18,8 +18,16 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 
-@app.route('/test')
-def test():
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
+
+
+@app.route("/")
+def index():
+    db_sess = db_session.create_session()
+    users = db_sess.query(Types).filter().all()
     item = [{'name': 'Забавная футболка', 'about': 'Очень крутая футболка с забавным принтом',
               'price': 1000, 'image': '/static/images/1.png'},
              {'name': 'не футболка', 'about': 'Очень крутая футболка с забавным принтом',
@@ -32,24 +40,10 @@ def test():
              'price': 1000, 'image': '/static/images/1.png'},
             {'name': 'кофта футболка', 'about': 'Очень крутая футболка с забавным принтом',
              'price': 1000, 'image': '/static/images/1.png'}
-            ]
-
-    return render_template('test.html', item=item)
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    db_sess = db_session.create_session()
-    return db_sess.query(User).get(user_id)
-
-
-@app.route("/")
-def index():
-    db_sess = db_session.create_session()
-    users = db_sess.query(Types).filter().all()
+            ]  # Пример
     if current_user.is_authenticated:
         print('alright, you are already logged in')  # console for me
-    return render_template('index.html', user=users)
+    return render_template('test.html', item=item)
 
 
 @app.route('/registration', methods=['GET', 'POST'])
