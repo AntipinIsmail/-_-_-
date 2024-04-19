@@ -17,16 +17,17 @@
         {{form.about.label}}<br>
         {{ form.about(class="form-control")}} <br>
     </p>
-    <p>
+     <p>
         {{form.type.label}} <br>
         {%for elem in form.info%}
-        <input class="form-check-input" type="radio" name="exampleRadios" id="{{elem.id}}" value="{{elem.id}}" checked>
-  <label class="form-check-label" for="{{elem.id}}">
-    {{elem.title}}}
-  </label>
+        <input class="form-check-input" type="radio" name="exampleRadios" id="{{elem.id}}"
+               value="{{elem.id}}" checked>
+         <label class="form-check-label" for="{{elem.id}}">
+        {{elem.title}}
+        </label>
         {%endfor%}
     </p>
-    <p>
+     <p>
         {{ form.price.label }}<br>
         {{ form.price(class="form-control") }}<br>
         {% for error in form.price.errors %}
@@ -47,3 +48,13 @@
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
 </form>
 {% endblock %}
+
+ <p>
+        {{ form.price.label }}<br>
+        {{ form.price(class="form-control") }}<br>
+        {% for error in form.price.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>

@@ -16,8 +16,8 @@ class User(SqlAlchemyBase, UserMixin):
                               index=True, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=False)
 
-    #  items = orm.relationship("Items", back_populates='creator')
-    #  order = orm.relationship("Orders", back_populates='orderer')
+    items = orm.relationship("Items", back_populates='creator')
+    order = orm.relationship("Orders", back_populates='orderer')
 
     def __repr__(self):
         return f'<User> {self.id} {self.name} {self.email}'
