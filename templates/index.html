@@ -1,12 +1,21 @@
+<style>
+.navbar-brand {
+  float: right;
+}
+</style>
+
 {% extends "base.html" %}
+
 {% block title %} Home Page {% endblock %}
 {% block content %}
+{% if current_user.is_authenticated %}
+    <h2><a class="navbar-brand" href="/logout">{{ current_user.name }}</a></h2>
+{% endif %}
 <h1> Test </h1>
 {% for elem in user %}
 <div>
-    <h2>{{elem.name}}</h2>
-    <h2>{{elem.email}}</h2>
     <h2>{{elem.id}}</h2>
+    <h2>{{elem.title}}</h2>
 </div>
 {% endfor %}
 {% endblock %}
