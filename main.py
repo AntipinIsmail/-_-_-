@@ -20,9 +20,21 @@ login_manager.login_view = 'login'
 
 @app.route('/test')
 def test():
-    items = [{'name': 'Забавная футболка', 'description': 'Очень крутая футболка с забавным принтом',
-              'price': 1000, 'image': '/static/images/1.png'}]
-    return render_template('test.html', items=items)
+    item = [{'name': 'Забавная футболка', 'about': 'Очень крутая футболка с забавным принтом',
+              'price': 1000, 'image': '/static/images/1.png'},
+             {'name': 'не футболка', 'about': 'Очень крутая футболка с забавным принтом',
+              'price': 1000, 'image': '/static/images/1.png'},
+             {'name': 'кофта футболка', 'about': 'Очень крутая футболка с забавным принтом',
+              'price': 1000, 'image': '/static/images/1.png'},
+            {'name': 'Забавная футболка', 'about': 'Очень крутая футболка с забавным принтом',
+             'price': 1000, 'image': '/static/images/1.png'},
+            {'name': 'не футболка', 'about': 'Очень крутая футболка с забавным принтом',
+             'price': 1000, 'image': '/static/images/1.png'},
+            {'name': 'кофта футболка', 'about': 'Очень крутая футболка с забавным принтом',
+             'price': 1000, 'image': '/static/images/1.png'}
+            ]
+
+    return render_template('test.html', item=item)
 
 
 @login_manager.user_loader
@@ -90,37 +102,29 @@ def logout():
     return redirect("/")
 
 
+@app.route("/uploads/<filename>")
+def get_file(filename):
+    return send_from_directory(app.config["UPLOADED_PHOTOS_DEST"], filename)
+
+
 @app.route('/creator', methods=["POST", "GET"])
 @login_required
 def creator():
-    db_sess = db_session.create_session()
-    info = [elem for elem in db_sess.query(Types).filter().all()]
+    # info = [elem for elem in db_sess.query(Types).filter().all()]
     form = AddItem()
-    form.info = info
+    # form.info = info
     if form.validate_on_submit():
-        item = Items()
-        item.name = form.item_name.data
-        item.about = form.about.data
-        item.type_id = request.value
-        item.price = form.price
-        item.picture = form.photo.read()
-        item.creator_id = 1
+        db_sess = db_session.create_session()
+        item = Items(name=form.item_name.data,
+                     about=form.about.data,
+                     price=form.price.data,
+                     picture=form.photo.data.read(),
+                     user_id=current_user.id,
+                     )
+        db_sess.merge(current_user)
         db_sess.add(item)
         db_sess.commit()
-        # request.files
-        return redirect("/")
-        #  item = Items(name=form.item_name.data,
-        #               type_id=1,
-        #               about=form.about.data,
-        #               price=form.price.data,
-        #               picture=form.photo.data.read(),
-        #              creator_id=1, )
-        #  current_user.items.append(creator)
-        # item.type_id = form.type
-        # db_sess.merge(current_user)
-        # db_sess.add(item)
-        # db_sess.commit()
-    return render_template("creator3.html", form=form)
+        return render_template("creator.html", form=form)
 
 
 @app.route('/cart')
@@ -134,11 +138,6 @@ def cart():  # Пример, потом сюда свои данные заки�
     total = sum(item['price'] for item in cart_items)
 
     return render_template('cart.html', cart_items=cart_items, total=total)
-
-
-@app.route("/shopping_basket")
-def shopping_basket():
-    return "<h1> shopping basket</h1>"
 
 
 def main():

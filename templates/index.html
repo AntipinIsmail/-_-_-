@@ -8,9 +8,6 @@
 
 {% block title %} Home Page {% endblock %}
 {% block content %}
-{% if current_user.is_authenticated %}
-    <h2><a class="navbar-brand" href="/logout">{{ current_user.name }}</a></h2>
-{% endif %}
 <h1> Test </h1>
 {% for elem in user %}
 <div>
