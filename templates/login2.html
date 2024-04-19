@@ -30,16 +30,8 @@
         {{ error }}
     </div>
     {% endfor %}
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-    <h6> {{message}} </h6>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
     </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
 </form>
 </body>
-
 {% endblock %}

@@ -83,12 +83,7 @@
         button:hover {
             background-color: rgb(163, 122, 60);
     }
-    .image img {
-  width: 275px;
-  height: 250px;
-}
     </style>
-{% extends "base.html" %}
     {% block content %}
     <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <ul class="products clearfix">
@@ -96,11 +91,11 @@
         <li class="product-wrapper">
             <div class="product">
                 <div class="image">
-                    <img src="{{ elem.image }}" alt="">
+                    <img src="http://placehold.it/225x300" alt="">
                 </div>
                 <div class="info">
                     <h3>{{elem.name}}</h3>
-                    <small>{{ elem.about }}</small>
+                    <small>Описание</small>
                 </div>
                     <ul class="Rating">
                         <li><ion-icon name="star"></ion-icon></li>
@@ -111,7 +106,7 @@
                 <div class="info-price">
                     <span class="price">{{elem.price}}<small>₽</small></span>
                     <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
-                </div>
+                
             </div>
         </li>
         {% endfor %}

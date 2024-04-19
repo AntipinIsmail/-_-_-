@@ -9,21 +9,13 @@ class Items(SqlAlchemyBase):
 
     article = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    type = orm.relationship("Types")
-    type_id = sqlalchemy.Column(sqlalchemy.Integer,
-                                sqlalchemy.ForeignKey("types.id"))
-    creator = orm.relationship('User')
-    сreator_id = sqlalchemy.Column(sqlalchemy.Integer,
-                                sqlalchemy.ForeignKey("users.id"))
-    about = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    type = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("types.id"))
+    #creator = orm.relationship('User')
     price = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     picture = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-
-    orders = orm.relationship("Orders", back_populates='item')
-
     def __repr__(self):
-        return f'<Created> {self.creator} {self.name} {self.article}'
+        return f'<Created> {self.article} {self.name} {self.price}'
 
     def convertToBinaryData(self, picture):
         # Convert digital data to binary format
