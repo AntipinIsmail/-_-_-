@@ -14,6 +14,15 @@ table.table-bordered th, table.table-bordered td {
   border: 1px solid black;
   padding: 8px;
 }
+.cart {
+  margin: auto;
+  width: 70%;
+  height: 350px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
         button{
             font-size: 20px;
             border-radius: 5px;
@@ -23,10 +32,24 @@ table.table-bordered th, table.table-bordered td {
             font-weight: 600;
             background-color: rgb(194, 168, 129);
             transition: 0.5s;
+            float: right;
+            position: absolute;
+            margin-left: 100px;
+            text-align: center;
         }
         button:hover {
             background-color: rgb(163, 122, 60);
 }
+th, td {
+border: 1px solid #ccc;
+padding: 8px;
+}
+  th {
+        background-color: #f2f2f2;
+    }
+    td {
+        background-color: #f2f2f2;
+    }
     body {
     background-image: url('{{ url_for('static', filename='images/background.jpg') }}');
     background-repeat: no-repeat;
@@ -61,7 +84,7 @@ table.table-bordered th, table.table-bordered td {
           </tbody>
     </table>
     <h2>Итоговая стоимость: {{ total }} рублей</h2>
-    <button>Приобрести</button>
+    <button onclick="window.location.href='/payment'">Приобрести</button>
 </div>
 </body>
 {% endblock %}

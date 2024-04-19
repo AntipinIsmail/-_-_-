@@ -134,6 +134,14 @@ def cart():  # Пример, потом сюда свои данные заки�
     return render_template('cart.html', cart_items=cart_items, total=total)
 
 
+@app.route('/payment')
+@login_required
+def payment():  # Пример
+    total_sum = 60
+    order_id = 1345713
+    return render_template('payment.html', order_id=order_id, total_sum=total_sum)
+
+
 def main():
     db_session.global_init("db/blogs.db")
     app.run()
