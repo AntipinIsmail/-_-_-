@@ -83,19 +83,23 @@
         button:hover {
             background-color: rgb(163, 122, 60);
     }
+    .image img {
+    width: 250px;
+    height: 275px;
+    }
     </style>
     <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-    <ul class="products clearfix">
+<ul class="products clearfix">
 
-        <li class="product-wrapper">
-            <div class="product">
-                <div class="image">
-                    <img src="http://placehold.it/225x300" alt="">
-                </div>
+    <li class="product-wrapper">
+        <div class="product">
+            <div class="image">
+                {% for item in items %}
+                <img src="{{ item.image }}" alt="Here must be image...">
                 <div class="info">
-                    <h3>Название товара</h3>
-                    <small>Описание</small>
+                    <h3>{{ item.name }}</h3>
+                    <small>{{ item.description }}</small>
                 </div>
                     <ul class="Rating">
                         <li><ion-icon name="star"></ion-icon></li>
@@ -104,151 +108,11 @@
                         <li><ion-icon name="star"></ion-icon></li>
                         <li><ion-icon name="star-half"></ion-icon></li></ul>
                 <div class="info-price">
-                    <span class="price">230<small>₽</small></span>
+                    <span class="price">{{ item.price }}<small>₽</small></span>
+                    {% endfor %}
                     <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
-
+                    </div>
             </div>
-        </li>
-        <li class="product-wrapper">
-            <div class="product">
-                <div class="image">
-                    <img src="http://placehold.it/225x300" alt="">
-                </div>
-                <div class="info">
-                    <h3>Название товара</h3>
-                    <small>Описание</small>
-                </div>
-                    <ul class="Rating">
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star-half"></ion-icon></li></ul>
-                <div class="info-price">
-                    <span class="price">230<small>₽</small></span>
-                    <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
-
-            </div>
-        </li>
-        <li class="product-wrapper">
-            <div class="product">
-                <div class="image">
-                    <img src="http://placehold.it/225x300" alt="">
-                </div>
-                <div class="info">
-                    <h3>Название товара</h3>
-                    <small>Описание</small>
-                </div>
-                    <ul class="Rating">
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star-half"></ion-icon></li></ul>
-                <div class="info-price">
-                    <span class="price">230<small>₽</small></span>
-                    <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
-
-            </div>
-        </li>
-        <li class="product-wrapper">
-            <div class="product">
-                <div class="image">
-                    <img src="http://placehold.it/225x300" alt="">
-                </div>
-                <div class="info">
-                    <h3>Название товара</h3>
-                    <small>Описание</small>
-                </div>
-                    <ul class="Rating">
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star-half"></ion-icon></li></ul>
-                <div class="info-price">
-                    <span class="price">230<small>₽</small></span>
-                    <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
-
-            </div>	</li>
-        <li class="product-wrapper">
-            <div class="product">
-                <div class="image">
-                    <img src="http://placehold.it/225x300" alt="">
-                </div>
-                <div class="info">
-                    <h3>Название товара</h3>
-                    <small>Описание</small>
-                </div>
-                    <ul class="Rating">
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star-half"></ion-icon></li></ul>
-                <div class="info-price">
-                    <span class="price">230<small>₽</small></span>
-                    <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
-
-            </div>	</li>
-        <li class="product-wrapper">
-            <div class="product">
-                <div class="image">
-                    <img src="http://placehold.it/225x300" alt="">
-                </div>
-                <div class="info">
-                    <h3>Название товара</h3>
-                    <small>Описание</small>
-                </div>
-                    <ul class="Rating">
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star-half"></ion-icon></li></ul>
-                <div class="info-price">
-                    <span class="price">230<small>₽</small></span>
-                    <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
-
-            </div>	</li>
-        <li class="product-wrapper">
-            <div class="product">
-                <div class="image">
-                    <img src="http://placehold.it/225x300" alt="">
-                </div>
-                <div class="info">
-                    <h3>Название товара</h3>
-                    <small>Описание</small>
-                </div>
-                    <ul class="Rating">
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star-half"></ion-icon></li></ul>
-                <div class="info-price">
-                    <span class="price">230<small>₽</small></span>
-                    <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
-
-            </div>	</li>
-        <li class="product-wrapper">
-            <div class="product">
-                <div class="image">
-                    <img src="http://placehold.it/225x300" alt="">
-                </div>
-                <div class="info">
-                    <h3>Название товара</h3>
-                    <small>Описание</small>
-                </div>
-                    <ul class="Rating">
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star"></ion-icon></li>
-                        <li><ion-icon name="star-half"></ion-icon></li></ul>
-                <div class="info-price">
-                    <span class="price">230<small>₽</small></span>
-                    <button class="add-to-card"><ion-icon name="cart-outline"></ion-icon></button>
-
-            </div>	</li>
-    </ul>
+        </div>
+    </li>
+</ul>

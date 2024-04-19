@@ -18,6 +18,13 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 
+@app.route('/test')
+def test():
+    items = [{'name': 'Забавная футболка', 'description': 'Очень крутая футболка с забавным принтом',
+              'price': 1000, 'image': '/static/images/1.png'}]
+    return render_template('test.html', items=items)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
@@ -127,13 +134,6 @@ def cart():  # Пример, потом сюда свои данные заки�
     total = sum(item['price'] for item in cart_items)
 
     return render_template('cart.html', cart_items=cart_items, total=total)
-
-
-@app.route("/test")
-def test():
-    db_sess = db_session.create_session()
-    users = db_sess.query(User).filter().all()
-    return render_template('index.html', user=users)
 
 
 @app.route("/shopping_basket")
