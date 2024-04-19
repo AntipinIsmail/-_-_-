@@ -24,12 +24,19 @@ button:hover {
   color: blue;
   border: none;
 }
+    body {
+    background-image: url('{{ url_for('static', filename='images/cart.png') }}');
+    background-repeat: no-repeat;
+    background-size: 1920px 1080px;
+    background-position: center -100px;
+    }
 </style>
 
 {% extends "base.html" %}
 
 {% block title %} Home Page {% endblock %}
 {% block content %}
+<body>
 <div class="cart">
     <h1> Корзина </h1>
     <table class="table-bordered">
@@ -53,5 +60,6 @@ button:hover {
     <h2>Итоговая стоимость: {{ total }} рублей</h2>
     <button>Приобрести</button>
 </div>
+</body>
 {% endblock %}
 
