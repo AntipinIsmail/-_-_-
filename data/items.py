@@ -14,7 +14,7 @@ class Items(SqlAlchemyBase):
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     about = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    price = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    price = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
     picture = sqlalchemy.Column(sqlalchemy.String, nullable=False)
 
     orders = orm.relationship("Orders", back_populates='item')

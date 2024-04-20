@@ -21,3 +21,4 @@ class AddItem(FlaskForm):
     )
     # info = None
     submit = SubmitField('Create Item')
+

@@ -120,6 +120,23 @@ def creator():
 
 
 @login_required
+@app.route("/edit", methods=['GET', 'POST'])
+def edit():
+    db_sess = db_session.create_session()
+    items = db_sess.query(Items).filter(Items.user_id == current_user.id ).all()
+    return render_template("user_edit.html", user=items)
+
+@login_required
+@app.route("/edit/delete/<int:item_article>")
+def delete(item_article):
+    db_sess = db_session.create_session()
+    items = db_sess.query(Items).filter(Items.article == item_article).first()
+    db_sess.delete(items)
+    db_sess.commit()
+    return render_template("/user_edit.html")
+
+
+@login_required
 @app.route("/cart")
 def cart():
     db_sess = db_session.create_session()
