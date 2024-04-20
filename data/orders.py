@@ -12,11 +12,24 @@ class Orders(SqlAlchemyBase):
     item = orm.relationship("Items")
     item_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("items.article"))
-    size = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
-    address = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+     #size = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    # address = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     user = orm.relationship('User')
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
+   # quantity = sqlalchemy.Column(sqlalchemy.Integer, default=1)
 
-    def __repr__(self):
-        return f'<Orderd> {self.orderer} {self.order_id} {self.item_id}'
+
+    def __init__(self, user_id, item_id):
+        self.user_id = user_id
+        self.item_id = item_id
+
+
+
+    def saveToDB(self):
+        sqlalchemy.session.add(self)
+        sqlalchemy.session.commit()
+
+    def deleteFromDB(self):
+        sqlalchemy.session.delete(self)
+        sqlalchemy.session.commit()
