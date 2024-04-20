@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1><strong>{{item.name}}</strong></h1>
+<br>
+<h2>{{item.about}}</h2>
+<br>
+<img src="{{item.picture}}" alt="not_found">
+<br>
+
+<h3>{{item.price}}</h3>
+
+<a href="/{{item.article}}/add_to_cart">
+     <button style="font-size:25px; background-color:blue; border-radius:25px;">Add to Cart</button>
+</a>
+{%endblock%}
+
+
