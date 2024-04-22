@@ -1,6 +1,7 @@
-from flask import Flask, render_template, url_for, redirect, request, flash, send_from_directory, make_response
+from flask import Flask, render_template, url_for, redirect,  flash, send_from_directory
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_uploads import UploadSet, IMAGES, configure_uploads
+import os
 
 from data import db_session
 from data.users import User
@@ -163,8 +164,15 @@ def edit():
 def delete(item_article):
     db_sess = db_session.create_session()
     items = db_sess.query(Items).filter(Items.article == item_article).first()
-    db_sess.delete(items)
-    db_sess.commit()
+    try:
+        os.unlink(
+        os.path.join(app.root_path, f"uploads/{items.picture.split("/")[-1]}"))
+        if db_sess.query(Orders).filter_by(item_id=item_article).first():
+            db_sess.delete(db_sess.query(Orders).filter_by(item_id=item_article).first())
+        db_sess.delete(items)
+        db_sess.commit()
+    except:
+        pass
     return redirect(url_for('edit'))
 
 
